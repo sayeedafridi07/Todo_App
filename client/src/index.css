@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+
+@variant dark (&:is(.dark *));
+
 .sky-scroll::-webkit-scrollbar {
   width: 8px;
 }

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import Card from './Card';
-import { Plus } from 'lucide-react';
+import { Plus, Moon, Sun } from 'lucide-react';
 import Modal from './Modal';
 import Form from './Form';
 import axios from 'axios';
 import Loader from './Loader';
 
-const Foreground = () => {
+const Foreground = ({ darkMode, toggleDarkMode }) => {
   const ref = useRef(null);
   const [todos, setTodos] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -118,10 +118,23 @@ const Foreground = () => {
           : Array.from({ length: 26 }).map((_, i) => (
               <div
                 key={i}
-                className="h-72 w-64 animate-pulse rounded-3xl bg-zinc-500"
+                className="h-72 w-64 animate-pulse rounded-3xl bg-zinc-300 dark:bg-zinc-500"
               />
             ))}
       </div>
+
+      {/* Dark/Light toggle */}
+      <button
+        onClick={toggleDarkMode}
+        className="fixed right-10 top-10 cursor-pointer rounded-full bg-zinc-200 dark:bg-zinc-700 p-3 shadow-md hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-colors duration-300 focus:outline-2 focus:outline-offset-2 focus:outline-sky-500"
+        title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      >
+        {darkMode ? (
+          <Sun className="size-6 text-yellow-400" />
+        ) : (
+          <Moon className="size-6 text-white" />
+        )}
+      </button>
 
       <button
         onClick={handleAddClick}

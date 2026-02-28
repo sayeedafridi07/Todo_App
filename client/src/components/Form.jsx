@@ -28,14 +28,14 @@ const Form = ({ data, isEditing, setFormData, onDelete }) => {
   };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-3xl bg-zinc-900/90 text-white">
+    <div className="relative w-full overflow-hidden rounded-3xl bg-white/95 text-zinc-800 dark:bg-zinc-900/90 dark:text-white transition-colors duration-300">
       <div className="flex flex-col space-y-4 px-8 py-10">
         <input
           name="title"
           value={data.title}
           onChange={handleOnChange}
           placeholder="Title"
-          className="text-2xl leading-tight font-semibold focus:outline-none"
+          className="bg-transparent text-2xl leading-tight font-semibold placeholder:text-zinc-300 dark:placeholder:text-zinc-500 focus:outline-none"
         />
         <textarea
           ref={textareaRef}
@@ -44,7 +44,7 @@ const Form = ({ data, isEditing, setFormData, onDelete }) => {
           onChange={handleOnChange}
           placeholder="Take a note..."
           autoFocus
-          className="max-h-[30vh] sky-scroll resize-none overflow-hidden overflow-y-auto text-lg leading-snug text-zinc-200 focus:outline-none"
+          className="max-h-[30vh] sky-scroll resize-none overflow-hidden overflow-y-auto bg-transparent text-lg leading-snug text-zinc-500 dark:text-zinc-200 placeholder:text-zinc-300 dark:placeholder:text-zinc-500 focus:outline-none"
         />
       </div>
       {/* foobar */}
@@ -56,7 +56,7 @@ const Form = ({ data, isEditing, setFormData, onDelete }) => {
             title="Delete"
             onClick={onDelete}
           >
-            <Trash2 className="text-zinc-200" />
+            <Trash2 className="text-zinc-500 dark:text-zinc-200" />
           </button>
 
           <button

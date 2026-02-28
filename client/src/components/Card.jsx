@@ -32,7 +32,7 @@ const Card = ({ todo, reference, onClick, isFront, onFocus }) => {
           onClick(todo);
         }
       }}
-      className="relative h-72 w-64 cursor-pointer overflow-hidden rounded-3xl bg-zinc-900 px-8 py-10 text-white select-none"
+      className="relative h-72 w-64 cursor-pointer overflow-hidden rounded-3xl bg-white text-zinc-800 dark:bg-zinc-900 dark:text-white px-8 py-10 select-none transition-colors duration-300"
     >
       {/* Drag Handle */}
       <div
@@ -40,7 +40,7 @@ const Card = ({ todo, reference, onClick, isFront, onFocus }) => {
         onPointerDown={(e) => controls.start(e)}
         className="absolute top-0 right-0 cursor-grab active:cursor-grabbing"
       >
-        <Grip className="text-zinc-400" />
+        <Grip className="text-zinc-300 dark:text-zinc-400" />
       </div>
 
       {/* Title */}
@@ -49,7 +49,7 @@ const Card = ({ todo, reference, onClick, isFront, onFocus }) => {
       )}
 
       {/* Description */}
-      <p className="line-clamp-6 text-sm leading-snug text-zinc-200">
+      <p className="line-clamp-6 text-sm leading-snug text-zinc-500 dark:text-zinc-200">
         {description}
       </p>
 

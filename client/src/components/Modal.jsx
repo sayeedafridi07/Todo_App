@@ -30,7 +30,7 @@ const Modal = ({ visible, onClose, children }) => {
       />
 
       {/* Modal Box */}
-      <div className="relative w-full max-w-xl mx-4">
+      <div className="relative w-full max-w-xl mx-4 shadow-2xl rounded-3xl">
         {/* Close Button */}
         <button
           onClick={onClose}
