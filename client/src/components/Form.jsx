@@ -20,7 +20,7 @@ const Form = ({ data, isEditing, setFormData, onDelete }) => {
   };
 
   return (
-    <div className="relative w-full min-w-xl overflow-hidden rounded-3xl bg-zinc-900/90 text-white">
+    <div className="relative w-full overflow-hidden rounded-3xl bg-zinc-900/90 text-white">
       <div className="flex flex-col space-y-4 px-8 py-10">
         <input
           name="title"

@@ -22,15 +22,15 @@ const Modal = ({ visible, onClose, children }) => {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-white/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal Box */}
-      <div className="relative">
+      <div className="relative w-full max-w-xl mx-4">
         {/* Close Button */}
         <button
           onClick={onClose}
