@@ -1,19 +1,14 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Card from './Card';
 import { Plus } from 'lucide-react';
 import Modal from './Modal';
 import Form from './Form';
+import axios from 'axios';
+import Loader from './Loader';
 
 const Foreground = () => {
   const ref = useRef(null);
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: 'hello',
-      description: 'testing',
-      isCompleted: true,
-    },
-  ]);
+  const [todos, setTodos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -22,6 +17,8 @@ const Foreground = () => {
     description: '',
     isCompleted: false,
   });
+  const [isFetching, setIsFetching] = useState(false);
+  const [frontCardId, setFrontCardId] = useState(null);
 
   const handleCardClick = (item) => {
     setSelectedTodo(item);
@@ -42,31 +39,40 @@ const Foreground = () => {
   };
 
   // Add or update todo on modal close
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     if (!formData.title.trim() && !formData.description.trim()) {
       setShowModal(false);
       setSelectedTodo(null);
       setIsEditing(false);
       return;
     }
-    if (isEditing && selectedTodo) {
-      setTodos((prev) =>
-        prev.map((todo) =>
-          todo.id === selectedTodo.id ? { ...todo, ...formData } : todo,
-        ),
-      );
-    } else {
-      setTodos((prev) => [
-        ...prev,
-        {
-          ...formData,
-          id: Date.now(),
+    try {
+      const url =
+        isEditing && selectedTodo
+          ? `http://localhost:3000/todo/${selectedTodo.id}`
+          : 'http://localhost:3000/todo';
+      const method = isEditing ? 'put' : 'post';
+      const response = await axios[method](url, formData, {
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ]);
-    }
-    setShowModal(false);
-    setSelectedTodo(null);
-    setIsEditing(false);
+      });
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
+      if (isEditing && selectedTodo) {
+        setTodos((prev) =>
+          prev.map((todo) =>
+            todo.id === selectedTodo.id ? { ...todo, ...formData } : todo,
+          ),
+        );
+      } else {
+        setTodos((prev) => [...prev, response.data.data]);
+      }
+      setShowModal(false);
+      setSelectedTodo(null);
+      setIsEditing(false);
+    } catch (error) {}
   };
 
   const handleDelete = () => {
@@ -79,25 +85,47 @@ const Foreground = () => {
   };
 
   console.log('====================================');
-  console.log('TODO:', todos);
+  console.log('TODO:', todos, isFetching);
   console.log('====================================');
 
+  useEffect(() => {
+    (async () => {
+      setIsFetching(true);
+      try {
+        const response = await axios.get('http://localhost:3000/todos');
+        setTodos(response?.data?.data);
+      } catch (error) {
+      } finally {
+        setIsFetching(false);
+      }
+    })();
+  }, []);
+
   return (
-    <div ref={ref} className="fixed inset-0 z-20 h-full w-full">
+    <div ref={ref} className="fixed inset-0 z-20 h-full w-full overflow-y-auto">
       <div className="flex flex-wrap gap-10 p-5">
-        {todos?.map((item) => (
-          <Card
-            key={item.id}
-            reference={ref}
-            todo={item}
-            onClick={handleCardClick}
-          />
-        ))}
+        {!isFetching
+          ? todos?.map((item) => (
+              <Card
+                key={item.id}
+                reference={ref}
+                todo={item}
+                onClick={handleCardClick}
+                isFront={frontCardId === item.id}
+                onFocus={() => setFrontCardId(item.id)}
+              />
+            ))
+          : Array.from({ length: 26 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-72 w-64 animate-pulse rounded-3xl bg-zinc-500"
+              />
+            ))}
       </div>
 
       <button
         onClick={handleAddClick}
-        className="group absolute right-10 bottom-10 cursor-pointer rounded-full bg-sky-500 p-4 hover:bg-sky-600 focus:outline-2 focus:outline-offset-2 focus:outline-sky-500 active:bg-sky-700"
+        className="group fixed right-10 bottom-10 cursor-pointer rounded-full bg-sky-500 p-4 hover:bg-sky-600 focus:outline-2 focus:outline-offset-2 focus:outline-sky-500 active:bg-sky-700"
       >
         <Plus className="size-8 text-white" />
       </button>

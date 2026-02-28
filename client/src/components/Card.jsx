@@ -2,7 +2,7 @@ import { motion, useDragControls } from 'framer-motion';
 import { Grip } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-const Card = ({ todo, reference, onClick }) => {
+const Card = ({ todo, reference, onClick, isFront, onFocus }) => {
   const { title, description, isCompleted } = todo;
 
   const controls = useDragControls();
@@ -17,23 +17,28 @@ const Card = ({ todo, reference, onClick }) => {
       dragControls={controls}
       dragConstraints={reference}
       whileDrag={{ scale: 1.08 }}
-      onDragStart={() => setWasDragging(true)}
+      style={{ zIndex: isFront ? 10 : 1 }}
+      onDragStart={() => {
+        setWasDragging(true);
+        onFocus();
+      }}
       onDragEnd={() => {
         // small timeout to avoid immediate click trigger
         setTimeout(() => setWasDragging(false), 0);
       }}
       onClick={() => {
         if (!wasDragging) {
+          onFocus();
           onClick(todo);
         }
       }}
-      className="relative h-72 w-64 cursor-pointer overflow-hidden rounded-3xl bg-zinc-900/90 px-8 py-10 text-white select-none"
+      className="relative h-72 w-64 cursor-pointer overflow-hidden rounded-3xl bg-zinc-900 px-8 py-10 text-white select-none"
     >
       {/* Drag Handle */}
       <div
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => controls.start(e)}
-        className="absolute top-1 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing"
+        className="absolute top-0 right-0 cursor-grab active:cursor-grabbing"
       >
         <Grip className="text-zinc-400" />
       </div>

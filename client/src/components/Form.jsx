@@ -1,8 +1,16 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Trash2 } from 'lucide-react';
 
 const Form = ({ data, isEditing, setFormData, onDelete }) => {
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + 'px';
+    }
+  }, [data.description]);
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -36,7 +44,7 @@ const Form = ({ data, isEditing, setFormData, onDelete }) => {
           onChange={handleOnChange}
           placeholder="Take a note..."
           autoFocus
-          className="resize-none overflow-hidden text-lg leading-snug text-zinc-200 focus:outline-none"
+          className="max-h-[30vh] sky-scroll resize-none overflow-hidden overflow-y-auto text-lg leading-snug text-zinc-200 focus:outline-none"
         />
       </div>
       {/* foobar */}

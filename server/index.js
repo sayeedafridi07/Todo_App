@@ -39,10 +39,10 @@ app.get("/todos/:id", (req, res) => {
 app.post("/todo", (req, res) => {
   const { title, description } = req.body;
 
-  if (!title || !description) {
+  if (!title && !description) {
     res.status(400).json({
       status: false,
-      message: "Invali Input!",
+      message: "Invalid Input!",
     });
   }
 
@@ -73,10 +73,10 @@ app.put("/todo/:id", (req, res) => {
     });
   }
 
-  if (!title || !description) {
+  if (!title && !description) {
     res.status(400).json({
       status: false,
-      message: "Invali Input!",
+      message: "Invalid Input!",
     });
   }
 
